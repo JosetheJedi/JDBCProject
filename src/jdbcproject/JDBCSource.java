@@ -11,7 +11,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Scanner;
 import tables.WritingGroups;
-
+import tables.Books;
 /**
  *
  * @author Josef
@@ -91,7 +91,7 @@ public class JDBCSource {
                    insert.setNumberofpages(inputInt.nextInt());
                    
                    // passing in Book bean and connection
-                   // Books.InsertBook(conn, insert);
+                   Books.insertBook(conn, insert);
                }
                else if(userOp == 8){
                    
