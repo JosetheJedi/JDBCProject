@@ -50,11 +50,10 @@ public class WritingGroups {
         ResultSet rs = null;
         
         
-        System.out.println("Retrieving all info for " + gName);
+        System.out.println("\nRetrieving all info for " + gName);
         
-        String groupname, headwriter, yearformed, subject, booktitle, publishername,
-                yearpublished;
-        int numberofpages = 0;
+        String groupname, headwriter, yearformed, subject, booktitle, publishername;
+        int yearpublished = 0, numberofpages = 0;
         
         try(PreparedStatement stmt = conn.prepareStatement(sql, 
                 ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -66,6 +65,12 @@ public class WritingGroups {
             
             System.out.println("groupname, headwriter, yearformed, subject, booktitle, publishername");
             
+            if(!rs.next()){
+                System.err.println("NO SUCH GROUP IN DATABASE!");
+            }
+            else
+                rs.beforeFirst();
+            
             while(rs.next()){
                 groupname = rs.getString("groupname");
                 headwriter = rs.getString("headwriter");
@@ -73,10 +78,12 @@ public class WritingGroups {
                 subject = rs.getString("subject");
                 booktitle = rs.getString("booktitle");
                 publishername = rs.getString("publishername");
-                //yearpublished = rs.getString("yearpublished");
+                yearpublished = rs.getInt("yearpublished");
                 numberofpages = rs.getInt("numberofpages");
                 
-                System.out.println(groupname + " " + headwriter + " " + yearformed +  " " +subject +  " " +booktitle+ " " + publishername + " " + numberofpages);
+                System.out.println(groupname + " " + headwriter + " " + 
+                        yearformed +  " " +subject +  " " +booktitle+ " " +
+                        publishername + " " + numberofpages);
             }
         } catch (SQLException ex) {
             System.err.println(ex);
