@@ -15,7 +15,7 @@ public class Books {
             
             System.out.println("Book Titles");
             while(rs.next()){
-                bookTitles = rs.getString("bookTitles"); 
+                bookTitles = rs.getString("bookTitle"); 
                 System.out.println(rs.getRow() + ") " + bookTitles);
             }
         } catch (SQLException ex) {
