@@ -1,7 +1,7 @@
 CREATE TABLE WritingGroups(
     GroupName varchar(50) NOT NULL,
     HeadWriter varchar(50),
-    YearFormed Integer(Short),
+    YearFormed smallint,
     Subject varchar(50),
     CONSTRAINT writing_pk PRIMARY KEY (GroupName)
 );
