@@ -43,7 +43,7 @@ public class Books {
             System.err.println(ex);
         }
     }
-    public static void addBook(Connection conn, Book insert){
+    public static void insertBook(Connection conn, Book insert){
         //('GroupName', 'BookTitle', 'PubName', yearPub, numPages)
         String sql = "INSERT INTO books VALUES(?,?,?,?,?)";
         try(PreparedStatement stmt = conn.prepareStatement(sql)){
@@ -52,10 +52,11 @@ public class Books {
             stmt.setString(3, insert.getPublisherName());
             stmt.setInt(4, insert.getYearpublished());
             stmt.setInt(5, insert.getNumberofpages());
-            stmt.executeUpdate(sql);
+            stmt.executeUpdate();
         }catch(SQLException ex){
             System.err.println(ex);
         }
     }
-    
+    public static void removeBook(Connection conn, String remove){     
+    }
 }
