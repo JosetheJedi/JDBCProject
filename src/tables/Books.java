@@ -57,5 +57,6 @@ public class Books {
             System.err.println(ex);
         }
     }
-    
+    public static void removeBook(Connection conn, String remove){     
+    }
 }
