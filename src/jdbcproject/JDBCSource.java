@@ -13,7 +13,8 @@ import java.sql.SQLException;
 import java.util.Scanner;
 import tables.Publishers;
 import tables.WritingGroups;
-
+import tables.Books;
+import tables.Publishers;
 /**
  *
  * @author Josef
@@ -48,13 +49,16 @@ public class JDBCSource {
            System.out.println("\n\nWhat would you like to do?");
            
            while(cont){
-               System.out.println("\n\n1) List all groups\n2) "
-                   + "List group details for a specified group\n3) List all"
-                   + " publishers\n4) List publisher details for a specified "
-                   + "publisher\n5) List all books\n6) List all the data for"
-                   + " a book specified\n7) Insert a new book\n8) "
-                   + "Insert a new publisher to update a publishers info\n9)"
-                   + " Remove a specified book\n10) Exit");
+               System.out.println("\n\n1) List all groups"
+                   + "\n2) List group details for a specified group"
+                   + "\n3) List all publishers"
+                   + "\n4) List publisher details for a specified publisher"
+                   + "\n5) List all books"
+                   + "\n6) List all the data for a book specified"
+                   + "\n7) Insert a new book"
+                   + "\n8) Insert a new publisher to update a publishers info"
+                   + "\n9) Remove a specified book"
+                   + "\n10) Exit");
                userOp = inputInt.nextInt();
                
                //WritingGroups.displayAllGroups(conn);
@@ -68,18 +72,20 @@ public class JDBCSource {
                    WritingGroups.displayAllInfo(conn, usrStr);
                }else if(userOp == 3){
                    Publishers.displayAllPublishers(conn);
-                   
+
                }
                else if(userOp == 4){
-                    System.out.print("Enter publisher name: ");
-                    usrStr = input.nextLine();
-                    Publishers.displayAllInfo(conn, usrStr);
+                   System.out.println("Enter a publisher name: ");
+                   usrStr = input.nextLine();
+                   Publishers.displayAllInfo(conn, usrStr);
                }
                else if(userOp == 5){
-                   
+                   Books.displayAllBooks(conn);
                }
                else if(userOp == 6){
-               
+                   System.out.println("Enter a book name: ");
+                   usrStr = input.nextLine();
+                   Books.displayAllInfo(conn, usrStr);
                }
                else if(userOp == 7){
                    Book insert = new Book();
@@ -92,10 +98,9 @@ public class JDBCSource {
                    System.out.print("Year published: ");
                    insert.setYearpublished(inputInt.nextInt());
                    System.out.print("Number of Pages: ");
-                   insert.setNumberofpages(inputInt.nextInt());
-                   
+                   insert.setNumberofpages(inputInt.nextInt());                 
                    // passing in Book bean and connection
-                   // Books.InsertBook(conn, insert);
+                   Books.insertBook(conn, insert);
                }
                else if(userOp == 8){
                    String pubName = "";
@@ -121,8 +126,9 @@ public class JDBCSource {
                    // Publisher.update(conn, pubName, pUpdate);
                }
                else if(userOp == 9){
-                   
-                   
+                   System.out.println("Enter a book name: ");
+                   usrStr = input.nextLine();
+                   Books.removeBook(conn, usrStr);
                }
                else if(userOp == 10)
                    cont = false;
