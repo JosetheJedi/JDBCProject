@@ -98,9 +98,6 @@ public class JDBCSource {
                    // Books.InsertBook(conn, insert);
                }
                else if(userOp == 8){
-                   
-               }
-               else if(userOp == 9){
                    String pubName = "";
                    Publisher pUpdate = new Publisher();
                    
@@ -122,6 +119,9 @@ public class JDBCSource {
                    // passing in Publisher bean, connection, 
                    // and publisher to name
                    // Publisher.update(conn, pubName, pUpdate);
+               }
+               else if(userOp == 9){
+                   
                    
                }
                else if(userOp == 10)
