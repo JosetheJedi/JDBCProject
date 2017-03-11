@@ -46,7 +46,8 @@ public class Books {
                 rs.beforeFirst();
             }
                 System.out.println("Title, Group Name, Head Writer, Year Formed,"
-                        + " Subject, Pages, Publisher, Year Published, Publisher Address");
+                        + " Subject, Pages, Publisher, Year Published, Publisher Address"
+                        + " Publisher Phone, Publisher Email");
             while(rs.next()){
                 bookTitle = rs.getString("booktitle");
                 groupName = rs.getString("groupname");
