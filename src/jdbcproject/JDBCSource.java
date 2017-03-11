@@ -6,10 +6,12 @@
 package jdbcproject;
 
 import beans.Book;
+import beans.Publisher;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Scanner;
+import tables.Publishers;
 import tables.WritingGroups;
 
 /**
@@ -65,11 +67,13 @@ public class JDBCSource {
                    
                    WritingGroups.displayAllInfo(conn, usrStr);
                }else if(userOp == 3){
-                   
+                   Publishers.displayAllPublishers(conn);
                    
                }
                else if(userOp == 4){
-                    
+                    System.out.print("Enter publisher name: ");
+                    usrStr = input.nextLine();
+                    Publishers.displayAllInfo(conn, usrStr);
                }
                else if(userOp == 5){
                    
@@ -98,6 +102,27 @@ public class JDBCSource {
                }
                else if(userOp == 9){
                    String pubName = "";
+                   Publisher pUpdate = new Publisher();
+                   
+                   System.out.print("Which publisher info do you want to update?: ");
+                   pubName = input.nextLine();
+                   
+                   System.out.print("New publisher name: ");
+                   pUpdate.setpName(input.nextLine());
+                   
+                   System.out.print("New publisher address: ");
+                   pUpdate.setpAddress(input.nextLine());
+                   
+                   System.out.print("New publisher phone number: ");
+                   pUpdate.setpPhone(input.nextLine());
+                   
+                   System.out.print("New publisher email: ");
+                   pUpdate.setpEmail(input.nextLine());
+                   
+                   // passing in Publisher bean, connection, 
+                   // and publisher to name
+                   // Publisher.update(conn, pubName, pUpdate);
+                   
                }
                else if(userOp == 10)
                    cont = false;
