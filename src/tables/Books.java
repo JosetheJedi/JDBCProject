@@ -58,5 +58,12 @@ public class Books {
         }
     }
     public static void removeBook(Connection conn, String remove){     
+        String sql = "DELETE FROM books WHERE booktitle = ?";
+        try(PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setString(1, remove);
+            stmt.execute();
+        }catch (SQLException ex){
+            System.err.println(ex);
+        }
     }
 }
