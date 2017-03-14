@@ -24,7 +24,7 @@ public class JDBCSource {
     static String USER;
     static String PASS;
     static String DBNAME; // will hold the database name
-    static String DB_URL = "jdbc:derby://localhost:1527/";
+    static String DB_URL = "jdbc:derby://localhost:1527/"; 
 
     public static void main(String args[]) {
         Scanner input = new Scanner(System.in);
@@ -44,11 +44,14 @@ public class JDBCSource {
 
         DB_URL += DBNAME;
 
+        // Making a connection with a try with resources statement
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);) {
             System.out.println("ACCESS GRANTED!");
 
             System.out.println("\n\nWhat would you like to do?");
 
+            // The while loop will continue until the user enters 10
+            // setting cont variable to false.
             while (cont) {
                 System.out.println("\n\n1) List all groups"
                         + "\n2) List group details for a specified group"
@@ -60,9 +63,10 @@ public class JDBCSource {
                         + "\n8) Insert a new publisher to update a publishers info"
                         + "\n9) Remove a specified book"
                         + "\n10) Exit");
+                
+                // used for user option selection
                 userOp = inputInt.nextInt();
 
-                //WritingGroups.displayAllGroups(conn);
                 if (userOp == 1) {
                     WritingGroups.displayAllGroups(conn);
                 } else if (userOp == 2) {
@@ -84,21 +88,34 @@ public class JDBCSource {
                     usrStr = input.nextLine();
                     Books.displayAllInfo(conn, usrStr);
                 } else if (userOp == 7) {
+                    // Java bean created to pass information for a Book
+                    // the bean contains groupname, title, publishername, yearpublished
+                    // and number of pages.
+                    
                     Book insert = new Book();
+                    
                     System.out.print("Enter the group name for the book: ");
                     insert.setGroupName(input.nextLine());
+                    
                     System.out.print("Book Title: ");
                     insert.setBookTitle(input.nextLine());
+                    
                     System.out.print("Publisher Name: ");
                     insert.setPublisherName(input.nextLine());
+                    
                     System.out.print("Year published: ");
                     insert.setYearpublished(inputInt.nextInt());
+                    
                     System.out.print("Number of Pages: ");
                     insert.setNumberofpages(inputInt.nextInt());
+                    
                     // passing in Book bean and connection
                     Books.insertBook(conn, insert);
                 } else if (userOp == 8) {
                     String pubName = "";
+                    
+                    // Java bean created to pass information for a Publisher
+                    // the bean contains name, address, phone, and email info
                     Publisher bean = new Publisher();
 
                     System.out.print("Which publisher info do you want to update?: ");
@@ -119,6 +136,7 @@ public class JDBCSource {
                     // passing in Publisher bean, connection, 
                     // and publisher to name
                     Publishers.updatePub(conn, bean, pubName);
+                    
                     
                 } else if (userOp == 9) {
                     System.out.println("Enter a book name: ");
