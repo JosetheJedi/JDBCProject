@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,9 +22,10 @@ import java.util.logging.Logger;
 public class Publishers {
 
     /**
-     * displayAllPublishers will display the publisher name for every
-     * publisher listed in the table.
-     * @param conn 
+     * displayAllPublishers will display the publisher name for every publisher
+     * listed in the table.
+     *
+     * @param conn
      */
     public static void displayAllPublishers(Connection conn) {
 
@@ -37,7 +39,7 @@ public class Publishers {
             rs = stmt.executeQuery(sql);
 
             System.out.println("Publisher Name");
-            
+
             // This will print the publisher name if rs has more rows to display
             while (rs.next()) {
                 publisherName = rs.getString("publishername");
@@ -51,10 +53,11 @@ public class Publishers {
     }
 
     /**
-     * displayAllInfo will show every attribute value for a publisher
-     * that the user specifies.
+     * displayAllInfo will show every attribute value for a publisher that the
+     * user specifies.
+     *
      * @param conn
-     * @param pName 
+     * @param pName
      */
     public static void displayAllInfo(Connection conn, String pName) {
 
@@ -77,17 +80,17 @@ public class Publishers {
 
             rs = stmt.executeQuery();
 
-            System.out.println("groupname, publisher name"
-                    + ", yearformed, subject, booktitle, publishername");
-
-            // if the result set returns empty, then there is no such group
+            // if the result set returns empty, then there is no such publisher
             // in the database.
             if (!rs.next()) {
-                System.err.println("NO SUCH GROUP IN DATABASE!");
+                System.err.println("NO PUBLISHER BY THAT NAME IN DATABASE!");
             } else {
                 // setting the cursor before the first result
                 // so that the first value is read inside the while loop.
                 rs.beforeFirst();
+                System.out.println("groupname, publisher name"
+                        + ", yearformed, subject, booktitle, publishername");
+
             }
 
             while (rs.next()) {
@@ -111,60 +114,53 @@ public class Publishers {
 
     /**
      * updatePub will create a row for the publisher information that the user
-     * provides and then set the books from the old publisher to be published
-     * by the new publisher created. It will then delete the old publisher from
-     * the database.
+     * provides and then set the books from the old publisher to be published by
+     * the new publisher created. It will then delete the old publisher from the
+     * database.
+     *
      * @param conn
      * @param bean
-     * @param pname 
+     * @param pname
      */
-    public static void updatePub(Connection conn, Publisher bean, String pname) {
+    public static void updatePub(Connection conn, Publisher bean, String pname, Boolean exists) {
 
         System.out.println("UPDATING INFORMATION");
-        
-        // if the publisher is inserted succesfully then it goes to change
-        // the publisher value of every book to the new publisher.
-        if (InsertPub(conn, bean)) {
-            // if changing the publisher information from the old publisher 
-            // to the new publisher is successful, then it goes on to delete
-            // the old publisher.
-            if (ChangePub(conn, bean, pname)) {
-                // if deleting the old publisher is successful then a success
-                // message is displayed.
-                if (DeletePub(conn, pname)) {
+
+        // if the publisher is not found then the publisher is inserted
+        if (!exists) {
+            
+            // if the publisher is inserted succesfully then it goes to change
+            // the publisher value of every book to the new publisher.
+            if (InsertPub(conn, bean)) {
+                // if changing the publisher information from the old publisher 
+                // to the new publisher is successful, then it informs the user
+                if (ChangePub(conn, bean, pname)) {
                     System.out.println("INFORMATION UPDATED!!!");
-                }
-                else{
-                    // if it fails to delete the publisher the action will roll back
-                    Publisher beanRoll = new Publisher();
-                    // adding publisher name to a bean for rollback operation
-                    beanRoll.setpName(pname);
-                    
-                    // reverting the change of publisher
-                    ChangePub(conn, beanRoll, bean.getpName());
-                    
-                    // deleting the publisher inserted
+                } else {
+                    // if it fails to Change the new publisher the update will roll
+                    // back deleting the publisher inserted
                     DeletePub(conn, bean.getpName());
-                    
                     System.out.println("UPDATE FAILED: ROLLING BACK ACTIONS");
                 }
+            } else {
+                // if it fails to insert the new publisher the program will 
+                // notify the user that nothing changed.
+                System.out.println("UPDATE FAILED: NOTHING WAS CHANGED!");
             }
-            else{
-                // if it fails to Change the new publisher the update will roll
-                // back
-                // deleting the publisher inserted
-                DeletePub(conn, bean.getpName());
-                System.out.println("UPDATE FAILED: ROLLING BACK ACTIONS");
+        } else { // if the publisher is found the update happens.
+
+            // if changing the publisher information from the old publisher 
+            // to the new publisher is successful, then it informs the user
+            if (ChangePub(conn, bean, pname)) {
+                System.out.println("INFORMATION UPDATED!!!");
+            } else {
+                // if it fails to Change the new publisher the update 
+                // notify the user that nothing changed.
+                System.out.println("UPDATE FAILED: NOTHING WAS CHANGED!");
             }
-        }
-        else{
-            // if inserting the new publisher is unsuccessful, then an
-            // error message is displayed
-            System.out.println("UPDATE FAILED: ROLLING BACK ACTIONS");
         }
     }
 
-    
     public static boolean InsertPub(Connection conn, Publisher bean) {
 
         System.out.println("INSERTING NEW PUBLISHER");
@@ -191,6 +187,9 @@ public class Publishers {
                 return false;
             }
 
+        } catch (SQLIntegrityConstraintViolationException ex) {
+            System.out.println("THE PUBLISHER NAME PROVIDED ALREADY EXISTS!");
+            return false;
         } catch (SQLException ex) {
             System.err.print(ex);
             return false;
@@ -213,14 +212,16 @@ public class Publishers {
 
             // the affected value is 2 since we are changing information from
             // two rows.
-            if (affected2 == 2) {
+            if (affected2 > 0) {
                 System.out.println("PUBLISHER UPDATE SUCCESSFUL");
                 return true;
             } else {
+                System.out.println("PUBLISHER UPDATE FAILED");
                 return false;
             }
 
         } catch (SQLException ex) {
+            System.out.println("Change failed");
             System.err.print(ex);
             return false;
         }
@@ -229,7 +230,7 @@ public class Publishers {
 
     public static boolean DeletePub(Connection conn, String pname) {
 
-        System.out.println("REMOVING PAST ENTRY");
+        System.out.println("REMOVING ENTRY");
 
         String sql = "Delete from publishers where publishername = ?";
 
@@ -252,5 +253,36 @@ public class Publishers {
             return false;
         }
 
+    }
+
+    public static boolean checkPub(Connection conn, String pname) {
+        String sql = "SELECT * FROM publishers WHERE publishername = ?";
+
+        ResultSet rs = null;
+
+        System.out.println("CHECKING FOR PUBLISHER");
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql,
+                ResultSet.TYPE_SCROLL_INSENSITIVE,
+                ResultSet.CONCUR_READ_ONLY);) {
+
+            // setting the question mark in the prepared statement to the
+            // publisher name that the user specified.
+            stmt.setString(1, pname);
+
+            rs = stmt.executeQuery();
+
+            // if the result set returns empty, then there is no such group
+            // in the database.
+            if (!rs.next()) {
+                return false;
+            } else {
+                return true;
+            }
+
+        } catch (SQLException ex) {
+            System.err.println(ex);
+            return false;
+        }
     }
 }
