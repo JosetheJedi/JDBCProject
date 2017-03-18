@@ -48,6 +48,11 @@ public class WritingGroups {
             rs = stmt.executeQuery();
             
             System.out.println("groupname, headwriter, yearformed, subject, booktitle, publishername");
+            
+            System.out.printf("%-20s%-20s%-20s%-20s%-20s%-20s%-20s\n",
+                        "Group Name", "Head Writer", "Year Formed",
+                        "Subject", "Book Title", "Publishers Name", "Number of Pages");
+            
             if(!rs.next()){
                 System.err.println("NO SUCH GROUP IN DATABASE!");
             }
@@ -64,9 +69,9 @@ public class WritingGroups {
                 yearpublished = rs.getInt("yearpublished");
                 numberofpages = rs.getInt("numberofpages");
                 
-                System.out.println(groupname + " " + headwriter + " " + 
-                        yearformed +  " " +subject +  " " +booktitle+ " " +
-                        publishername + " " + numberofpages);
+                System.out.printf("%-20s%-20s%-20s%-20s%-20s%-20s%-20s\n",
+                        groupname, headwriter, yearformed,
+                        subject, booktitle, publishername, numberofpages);
             }
         } catch (SQLException ex) {
             System.err.println(ex);
