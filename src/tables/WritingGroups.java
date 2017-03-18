@@ -72,5 +72,37 @@ public class WritingGroups {
             System.err.println(ex);
         }
     }
+    
+    
+    public static boolean checkWriting(Connection conn, String wname) {
+        String sql = "SELECT * FROM writinggroups WHERE groupname = ?";
+
+        ResultSet rs = null;
+
+        System.out.println("CHECKING FOR WRITING GROUP");
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql,
+                ResultSet.TYPE_SCROLL_INSENSITIVE,
+                ResultSet.CONCUR_READ_ONLY);) {
+
+            // setting the question mark in the prepared statement to the
+            // writing group name that the user specified.
+            stmt.setString(1, wname);
+
+            rs = stmt.executeQuery();
+
+            // if the result set returns empty, then there is no such group
+            // in the database.
+            if (!rs.next()) {
+                return false;
+            } else {
+                return true;
+            }
+
+        } catch (SQLException ex) {
+            System.err.println(ex);
+            return false;
+        }
+    }
 }
   
