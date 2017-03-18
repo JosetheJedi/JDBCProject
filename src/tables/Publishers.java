@@ -67,7 +67,7 @@ public class Publishers {
 
         System.out.println("\nRetrieving all info for " + pName);
 
-        String groupname, bookTitle, publisherName, pAddress, pPhone, pEmail;
+        String groupname, bookTitle, publisherName, pAddress, pPhone, pEmail, subject;
         int yearpublished = 0, numberofpages = 0;
 
         try (PreparedStatement stmt = conn.prepareStatement(sql,
@@ -83,13 +83,17 @@ public class Publishers {
             // if the result set returns empty, then there is no such publisher
             // in the database.
             if (!rs.next()) {
-                System.err.println("NO PUBLISHER BY THAT NAME IN DATABASE!");
+                System.err.println("THIS PUBLISHER IS NOT ASSOCIATED WITH ANY"
+                        + " BOOK");
             } else {
                 // setting the cursor before the first result
                 // so that the first value is read inside the while loop.
                 rs.beforeFirst();
-                System.out.println("groupname, publisher name"
-                        + ", yearformed, subject, booktitle, publishername");
+
+                System.out.printf("%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s\n",
+                        "Publisher Name", "Group Name", "Book Title", "Number of Pages",
+                        "Year Published", "Publisher Address", "Publishers Phone",
+                        "Publisher Email");
 
             }
 
@@ -103,9 +107,9 @@ public class Publishers {
                 yearpublished = rs.getInt("yearpublished");
                 numberofpages = rs.getInt("numberofpages");
 
-                System.out.println(groupname + " " + bookTitle + " "
-                        + publisherName + " " + pAddress + " " + pPhone + " "
-                        + pEmail + " " + yearpublished + " " + numberofpages);
+                System.out.printf("%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s\n", 
+                        publisherName, groupname, bookTitle, numberofpages, 
+                        yearpublished, pAddress, pPhone, pEmail);
             }
         } catch (SQLException ex) {
             System.err.println(ex);
@@ -128,7 +132,7 @@ public class Publishers {
 
         // if the publisher is not found then the publisher is inserted
         if (!exists) {
-            
+
             // if the publisher is inserted succesfully then it goes to change
             // the publisher value of every book to the new publisher.
             if (InsertPub(conn, bean)) {
