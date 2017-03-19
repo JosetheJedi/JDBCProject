@@ -92,25 +92,42 @@ public class JDBCSource {
                     // the bean contains groupname, title, publishername, yearpublished
                     // and number of pages.
 
-                    Book insert = new Book();
+                    Book bean = new Book();
 
                     System.out.print("Enter the group name for the book: ");
-                    insert.setGroupName(input.nextLine());
+                    bean.setGroupName(input.nextLine());
 
-                    System.out.print("Book Title: ");
-                    insert.setBookTitle(input.nextLine());
+                    if (WritingGroups.checkWriting(conn, bean.getGroupName())) {
 
-                    System.out.print("Publisher Name: ");
-                    insert.setPublisherName(input.nextLine());
+                        System.out.print("Publisher Name: ");
+                        bean.setPublisherName(input.nextLine());
 
-                    System.out.print("Year published: ");
-                    insert.setYearpublished(inputInt.nextInt());
+                        if (Publishers.checkPub(conn, bean.getPublisherName())) {
 
-                    System.out.print("Number of Pages: ");
-                    insert.setNumberofpages(inputInt.nextInt());
+                            System.out.print("Book Title: ");
+                            bean.setBookTitle(input.nextLine());
 
-                    // passing in Book bean and connection
-                    Books.insertBook(conn, insert);
+                            System.out.print("Year published: ");
+                            bean.setYearpublished(inputInt.nextInt());
+
+                            System.out.print("Number of Pages: ");
+                            bean.setNumberofpages(inputInt.nextInt());
+
+                            // passing in Book bean and connection
+                            Books.insertBook(conn, bean);
+                        }
+                        else{
+                            System.err.println("THE PUBLISHER DOES NOT EXIST: PLEASE"
+                                    + " CHOOSE A PUBLISHER THAT IS LISTED.");
+                        }
+                    }
+                    else{
+                        System.err.println("THE WRITING GROUP DOES NOT EXIST: PLEASE"
+                                    + " CHOOSE A WRITING GROUP THAT IS LISTED.");
+                    }
+                    
+                    
+                    
                 } else if (userOp == 8) {
                     String pubName = "";
 
@@ -140,8 +157,7 @@ public class JDBCSource {
                                 // passing in Publisher bean, connection, 
                                 // and publisher to name
                                 Publishers.updatePub(conn, bean, pubName, false);
-                            }
-                            else{
+                            } else {
                                 // passing in Publisher bean, connection, 
                                 // and publisher to name
                                 Publishers.updatePub(conn, bean, pubName, true);
