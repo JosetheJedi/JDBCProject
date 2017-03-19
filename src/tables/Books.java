@@ -1,7 +1,7 @@
 package tables;
 
 import java.sql.*;
-import beans.Book;
+import beans.*;
 
 public class Books {
     /**
@@ -53,9 +53,11 @@ public class Books {
             else{
                 rs.beforeFirst();
             }
-                System.out.println("Title, Group Name, Head Writer, Year Formed,"
-                        + " Subject, Pages, Publisher, Year Published, Publisher Address"
-                        + " Publisher Phone, Publisher Email");
+                System.out.printf("%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s\n",
+                         "Title", "Group Name", "Head Writer", "Year Formed",
+                         "Subject", "Pages", "Publisher", "Year Published", "Publisher Address",
+                         "Publisher Phone", "Publisher Email");
+                
             //print all the information related to the book
             while(rs.next()){
                 bookTitle = rs.getString("booktitle");
@@ -69,10 +71,9 @@ public class Books {
                 headWriter = rs.getString("headwriter");
                 yearFormed = rs.getString("yearformed");
                 subject = rs.getString("subject");
-                System.out.println(bookTitle + ", " + groupName + ", " + headWriter
-                                + ", " + yearFormed + ", " + subject + ", " + pages
-                                + ", " + pubName + ", " + yearPub + ", " + pubAddress
-                                + ", " + pubPhone + ", " + pubMail);
+                System.out.printf("%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s\n",
+                                bookTitle, groupName, headWriter, yearFormed, subject, pages,
+                                 pubName, yearPub, pubAddress, pubPhone, pubMail);
             }
         }
         catch (SQLException ex){
@@ -89,6 +90,7 @@ public class Books {
         //('GroupName', 'BookTitle', 'PubName', yearPub, numPages)
         String sql = "INSERT INTO books VALUES(?,?,?,?,?)";
         //set the statement based on the info of the book
+
         try(PreparedStatement stmt = conn.prepareStatement(sql)){
             stmt.setString(1, insert.getGroupName());
             stmt.setString(2, insert.getBookTitle());
