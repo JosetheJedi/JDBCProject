@@ -47,15 +47,16 @@ public class WritingGroups {
                 stmt.setString(1, gName);            
             rs = stmt.executeQuery();
             
-            System.out.printf("%-20s%-20s%-20s%-20s%-20s%-20s%-20s\n",
-                        "Group Name", "Head Writer", "Year Formed",
-                        "Subject", "Book Title", "Publishers Name", "Number of Pages");
             
             if(!rs.next()){
                 System.err.println("NO SUCH GROUP IN DATABASE!");
             }
-            else
+            else{
                 rs.beforeFirst();
+                System.out.printf("%-20s%-20s%-20s%-20s%-20s%-20s%-20s\n",
+                        "Group Name", "Head Writer", "Year Formed",
+                        "Subject", "Book Title", "Publishers Name", "Number of Pages");
+            }
             //prints all the information of the writing group
             while(rs.next()){
                 groupname = rs.getString("groupname");
