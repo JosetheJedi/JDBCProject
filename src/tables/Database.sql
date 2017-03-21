@@ -24,6 +24,7 @@ CREATE TABLE Books(
     CONSTRAINT books_fk FOREIGN KEY (GroupName)
     REFERENCES WritingGroups (GroupName),
     CONSTRAINT book_fk FOREIGN KEY (PublisherName)
-    REFERENCES Publishers (PublisherName)
+    REFERENCES Publishers (PublisherName),
+    CONSTRAINT book_pub UNIQUE (BookTitle, PublisherName)
     
 );

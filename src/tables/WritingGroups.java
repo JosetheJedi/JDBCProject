@@ -47,8 +47,6 @@ public class WritingGroups {
                 stmt.setString(1, gName);            
             rs = stmt.executeQuery();
             
-            System.out.println("groupname, headwriter, yearformed, subject, booktitle, publishername");
-            
             System.out.printf("%-20s%-20s%-20s%-20s%-20s%-20s%-20s\n",
                         "Group Name", "Head Writer", "Year Formed",
                         "Subject", "Book Title", "Publishers Name", "Number of Pages");
