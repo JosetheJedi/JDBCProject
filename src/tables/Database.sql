@@ -26,5 +26,4 @@ CREATE TABLE Books(
     CONSTRAINT book_fk FOREIGN KEY (PublisherName)
     REFERENCES Publishers (PublisherName),
     CONSTRAINT book_pub UNIQUE (BookTitle, PublisherName)
-    
 );
