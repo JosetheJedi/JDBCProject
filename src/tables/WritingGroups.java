@@ -61,6 +61,7 @@ public class WritingGroups {
                         "Group Name", "Head Writer", "Year Formed",
                         "Subject", "Book Title", "Publishers Name", "Number of Pages");
             }
+
             //prints all the information of the writing group
             while (rs.next()) {
                 groupname = rs.getString("groupname");
