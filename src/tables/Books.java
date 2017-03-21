@@ -51,12 +51,13 @@ public class Books {
                 System.err.println("No such book");
             }
             else{
-                rs.beforeFirst();
-            }
+                rs.beforeFirst();                
                 System.out.printf("%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s\n",
                          "Title", "Group Name", "Head Writer", "Year Formed",
                          "Subject", "Pages", "Publisher", "Year Published", "Publisher Address",
                          "Publisher Phone", "Publisher Email");
+            }
+
                 
             //print all the information related to the book
             while(rs.next()){
