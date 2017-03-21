@@ -51,19 +51,6 @@ public class WritingGroups {
                 ResultSet.CONCUR_READ_ONLY);) {
             stmt.setString(1, gName);
             rs = stmt.executeQuery();
-<<<<<<< HEAD
-            
-            
-            if(!rs.next()){
-                System.err.println("NO SUCH GROUP IN DATABASE!");
-            }
-            else{
-                rs.beforeFirst();
-                System.out.printf("%-20s%-20s%-20s%-20s%-20s%-20s%-20s\n",
-                        "Group Name", "Head Writer", "Year Formed",
-                        "Subject", "Book Title", "Publishers Name", "Number of Pages");
-            }
-=======
 
             if (!rs.next()) {
                 System.err.println("NO SUCH GROUP IN DATABASE!");
@@ -74,7 +61,7 @@ public class WritingGroups {
                         "Group Name", "Head Writer", "Year Formed",
                         "Subject", "Book Title", "Publishers Name", "Number of Pages");
             }
->>>>>>> 769f9fb73c4d82bf5fd3b226d457c557d26962e6
+
             //prints all the information of the writing group
             while (rs.next()) {
                 groupname = rs.getString("groupname");
