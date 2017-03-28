@@ -100,7 +100,7 @@ public class Books {
             stmt.setInt(5, insert.getNumberofpages());
             stmt.executeUpdate();
         }catch(SQLException ex){
-            System.err.println(ex);
+            System.err.println("The book already exists with the writing group");
         }
     }
     /**
